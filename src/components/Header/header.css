@@ -1,0 +1,102 @@
+header {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--header-bg);
+  box-shadow: 0 2px 8px var(--header-shadow);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  margin: 10px auto;
+  max-width: 1200px;
+  width: 95%;
+}
+
+header img {
+  height: 40px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+header img:hover {
+  transform: scale(1.05);
+}
+
+/* Блок авторизации */
+.auth-section {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.auth-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--header-text);
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.auth-button:hover {
+  background-color: rgba(251, 146, 60, 0.1);
+  transform: translateY(-1px);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+}
+
+.auth-username {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Иконка пользователя */
+.auth-button svg {
+  color: var(--header-accent);
+  transition: transform 0.3s ease;
+}
+
+.auth-button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+  header {
+    gap: 15px;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 8px 12px;
+  }
+
+  .auth-section {
+    margin-left: 0;
+    order: 1;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-username {
+    display: none;
+  }
+  
+  .auth-button {
+    padding: 6px;
+  }
+}

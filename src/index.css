@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600&display=swap');
+:root {
+    /* Светлая тема */
+    --color-bg: #fff7ed;
+    --color-accent: #fb923c;
+    --color-text: #334155;
+  }
+  /* Dark Theme */
+  [data-theme="dark"] {
+    --color-bg: #1e293b;
+    --color-accent: #fdba74;
+    --color-text: #f1f5f9;
+  }
+  
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }

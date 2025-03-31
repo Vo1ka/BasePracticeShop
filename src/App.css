@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600&display=swap');
+
+/*  переменные */
+:root {
+  /* Светлая тема */
+  --header-bg: #fff7ed;
+  --header-text: #334155;
+  --header-accent: #fb923c;
+  --header-shadow: rgba(0, 0, 0, 0.05);
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --card-border: #e2e8f0;
+}
+
+/* Тёмная тема  */
+[data-theme="dark"] {
+  --header-bg: #0f172a; 
+  --header-text: #f8fafc; 
+  --header-accent: #fdba74;
+  --header-shadow: rgba(0, 0, 0, 0.2);
+  --card-bg: #1e293b;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --card-border: #334155;
+}

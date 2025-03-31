@@ -1,0 +1,53 @@
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--toggle-bg);
+  color: var(--toggle-icon);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px var(--toggle-hover);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Тематические переменные */
+.light-theme {
+  --toggle-bg: rgba(251, 146, 60, 0.1);
+  --toggle-icon: #fb923c;
+  --toggle-hover: rgba(251, 146, 60, 0.2);
+}
+
+.dark-theme {
+  --toggle-bg: rgba(56, 189, 248, 0.1);
+  --toggle-icon: #38bdf8;
+  --toggle-hover: rgba(56, 189, 248, 0.2);
+}
+
+/* Адаптив */
+@media (max-width: 480px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -1,0 +1,40 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+  
+  .pagination-button {
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .pagination-button:hover {
+    background-color: var(--accent-primary);
+    color: rgb(98, 96, 96);
+  }
+  
+  .pagination-button.active {
+    background-color: var(--accent-primary);
+    color: black;
+    font-weight: bold;
+  }
+  
+  /* Тематические переменные */
+  .light-theme {
+    --button-bg: #e2e8f0;
+    --button-text: #334155;
+  }
+  
+  .dark-theme {
+    --button-bg: #475569;
+    --button-text: #f1f5f9;
+  }

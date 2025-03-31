@@ -1,0 +1,170 @@
+@import url('./../../../App.css');
+@import url('./../../../index.css');
+/* Оверлей модального окна */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* Эффект размытия фона */
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* модальное окно */
+  .auth-modal {
+    background-color: #ffffff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+  .dark-modal{
+    background-color: #1e293b;
+
+  }
+  
+  /* Анимация появления */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(3px);
+    }
+  }
+  
+  /* Заголовок модалки */
+  .auth-modal h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  
+  /* Форма */
+  .auth-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  /* Поля ввода */
+  .auth-modal input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f8fafc;
+    color: black;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .auth-modal input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.2);
+  }
+  
+  /* Кнопка отправки */
+  .auth-modal button[type="submit"] {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+  
+  .auth-modal button[type="submit"]:hover {
+    background-color: var(--accent-secondary);
+    transform: translateY(-1px);
+  }
+  
+  .auth-modal button[type="submit"]:active {
+    transform: translateY(0);
+  }
+  
+  /* Кнопка закрытия */
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+  
+  .close-button:hover {
+    color: var(--accent-primary);
+  }
+  
+  /* Сообщения об ошибках */
+  .error-message {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Ссылка на регистрацию/вход */
+  .auth-toggle {
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .auth-toggle button {
+    background: none;
+    border: none;
+    color: var(--accent-primary);
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  /* Тематические переменные */
+  .light-theme {
+    --modal-bg: #ffffff;
+    --input-bg: #f8fafc;
+    --input-border: #e2e8f0;
+  }
+  
+  .dark-theme {
+    --modal-bg: #1e293b;
+    --input-bg: #334155;
+    --input-border: #475569;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 480px) {
+    .auth-modal {
+      width: 90%;
+      padding: 1.5rem;
+    }
+    
+    .auth-modal h2 {
+      font-size: 1.3rem;
+    }
+  }
