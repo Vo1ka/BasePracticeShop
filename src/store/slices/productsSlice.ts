@@ -1,6 +1,18 @@
-// src/store/slices/productsSlice.ts
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { Product } from './../../types/type';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+// Тип для продукта согласно DummyJSON API
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+  description: string;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+}
 
 interface ProductsState {
   items: Product[];
@@ -9,50 +21,54 @@ interface ProductsState {
   error: string | null;
 }
 
-// Моковые товары
-const mockProducts: Product[] = [
-  { id: 1, title: 'Телефон', price: 500, image: 'url'},
-  { id: 2, title: 'Ноутбук', price: 1200, image: 'url' },
-];
-
-// Асинхронная загрузка товаров
-export const fetchProducts = createAsyncThunk(
-  'products/fetchProducts',
-  async () => {
-    return new Promise<Product[]>((resolve) => {
-      setTimeout(() => resolve(mockProducts), 1000);
-    });
-  }
-);
-
 const initialState: ProductsState = {
   items: [],
   filteredItems: [],
   status: 'idle',
-  error: null,
+  error: null
 };
+
+export const fetchProducts = createAsyncThunk(
+  'products/fetchAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Явно указываем тип ответа
+      const response = await axios.get<{
+        products: Product[];
+        total: number;
+        skip: number;
+        limit: number;
+      }>('https://dummyjson.com/products?limit=100');
+      
+      return response.data.products;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Unknown error occurred');
+    }
+  }
+);
 
 const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
     filterProducts: (state, action: PayloadAction<string>) => {
-      if (!action.payload) {
+      if (!action.payload.trim()) {
         state.filteredItems = state.items;
       } else {
-        state.filteredItems = state.items.filter((product) =>
+        state.filteredItems = state.items.filter(product =>
           product.title.toLowerCase().includes(action.payload.toLowerCase())
         );
       }
-    },
-    setProducts: (state, action: PayloadAction<Product[]>) => {
-      state.items = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
         state.status = 'loading';
+        state.error = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -61,10 +77,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Ошибка загрузки';
+        state.error = action.payload as string;
       });
-  },
+  }
 });
 
-export const { filterProducts, setProducts } = productsSlice.actions;
+export const { filterProducts } = productsSlice.actions;
 export default productsSlice.reducer;

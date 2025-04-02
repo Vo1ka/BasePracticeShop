@@ -7,14 +7,17 @@ import {logout} from './../../store/slices/authSlice'
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "./../../hooks/useTypedRedux";
 import AuthModal from "./Modal/AuthModal";
+import { Link } from "react-router-dom";
 
-interface HeaderProps {
-    onSearchChange: (query: string) => void;
-}
+type HeaderProps = {
+    
+    onSearchChange?: (query: string) => void;
+    showSearch?: boolean;
+  };
 
-const Header = ({onSearchChange}:HeaderProps) => {
+const Header = ({onSearchChange, showSearch = true}:HeaderProps) => {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-    const {user, status} = useAppSelector((state)=>state.auth);
+    const {user} = useAppSelector((state)=>state.auth);
     const dispatch = useAppDispatch();
     const handleAuthClick = () => {
         if (user) {
@@ -25,10 +28,13 @@ const Header = ({onSearchChange}:HeaderProps) => {
       };
     return (
         <header>
-            <img src="" alt="Logo" className="logo"/>
-            <SearchInput onSearchChange={onSearchChange}/>
+            <Link to="/" className="logo">Магазин</Link>
+            {showSearch && (<SearchInput onSearchChange={onSearchChange}/>)}
+            
             <ThemeToggle />
-            <CartDropdown />
+            <Link to="/cart">
+                <CartDropdown />
+            </Link>
             <div className="auth-section">
                 <button onClick={handleAuthClick} className="auth-button">
                     <FaUserCircle size={24} />
