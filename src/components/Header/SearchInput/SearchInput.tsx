@@ -6,7 +6,7 @@ import React from 'react';
 import './searchinput.css'
 
 interface SearchInputProps{
-    onSearchChange: (query: string) => void;
+    onSearchChange?: (query: string) => void;
 }
 
 const SearchInput =({onSearchChange}:SearchInputProps) => {
@@ -19,8 +19,11 @@ const SearchInput =({onSearchChange}:SearchInputProps) => {
     },[debouncedValue, dispatch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value); // Обновляем локальное состояние
-        onSearchChange(e.target.value); // Пробрасываем значение вверх
+        const value = e.target.value;
+        setInputValue(value);
+        if (onSearchChange) {
+            onSearchChange(value); 
+        }
     };
 
 

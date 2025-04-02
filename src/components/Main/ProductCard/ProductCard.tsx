@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from './../../../store/slices/cartSlice';
 import { Product } from '../../../types/type';
 import { RootState } from '../../../store/store';
+import { Link } from 'react-router-dom';
 
 
-export const ProductCard = ({product}:{product: Product}) =>{
+export const ProductCard = ({ product } :{ product : Product}) =>{
     const theme = useSelector((state:RootState)=>state.theme.mode);
     const dispatch = useDispatch();
     return(
         <div className="product-card">
+            
             <div className={`product-image-container ${theme === 'dark' ? 'dark' : ''}`}>
-            <img src={product.image} alt={product.title} className='product-name'/>
+            <Link to={`/product/${product.id}`}> 
+                <img src={product.thumbnail} alt={product.title} className='product-name' loading='lazy'/>
+            </Link>
             <div className={`product-info ${theme === 'dark' ? 'dark' : ''}`}>
                 <h3 className='product-title'>{product.title}</h3>
                 <p className='product-price'>{product.price} р</p>

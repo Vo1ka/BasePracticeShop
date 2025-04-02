@@ -3,16 +3,36 @@ import authReducer from './slices/authSlice';
 import themeReducer from './slices/themeSlice';
 import productsReducer from './slices/productsSlice';
 import cartReducer from './slices/cartSlice';
+import { createLogger } from 'redux-logger';
+import {api} from './slices/apiSlice';
+
+const logger = createLogger({
+  collapsed: true,
+  duration: true
+});
+
 
 export const store = configureStore({
   reducer: {
+    [api.reducerPath]: api.reducer,
     auth: authReducer,
     theme: themeReducer,
     products: productsReducer,
     cart: cartReducer,
     
   },
+  middleware: (getDefaultMiddleware) =>{
+    const middlewares = getDefaultMiddleware()
+      .concat(api.middleware); // Добавляем middleware RTK Query
+    
+    if (process.env.NODE_ENV === 'development') {
+      middlewares.push(logger); // Добавляем logger только в development
+    }
+    
+    return middlewares;
+  }
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+

@@ -5,16 +5,23 @@ import './productList.css';
 import { Product } from '../../../types/type';
 
 interface ProductListProps {
-    products: Product[];
-  }
+    products: Product[]; // Передаём уже отфильтрованные и пагинированные товары
+    status: "loading" | "error" | "success";
+    error: string | undefined | null;
+}
 
-export const ProductList = ({ products }: ProductListProps) =>{
+
+export const ProductList = ({products, status, error} : ProductListProps ) =>{
     const theme = useSelector((state: RootState) => state.theme.mode);
+    
+    if (status === 'loading') return <div className="loading">Загрузка...</div>;
+    if (status === 'error') return <div className="error">Ошибка: {error}</div>;
+    if (products.length === 0) return <div>Товары не найдены</div>;
 
     return (
         <div className={`product-list ${theme}`}>
-            {products.map((product)=> (
-                <ProductCard key={product.id} product={product} />
+            {products.map((item)=> (
+                <ProductCard key={item.id} product={item} />
             ))}
         </div>
     )
