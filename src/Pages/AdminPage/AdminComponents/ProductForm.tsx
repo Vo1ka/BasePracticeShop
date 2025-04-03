@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import './ProductForm.css';
+import './productform.css';
 import { Product } from '../../../types/type';
 
 interface ProductFormValues extends Partial<Product> {
