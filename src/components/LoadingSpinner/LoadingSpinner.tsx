@@ -1,5 +1,5 @@
 
-import './LoadingSpinner.css';
+import './oadingspinner.css';
 
 export const LoadingSpinner = () => {
   return (
