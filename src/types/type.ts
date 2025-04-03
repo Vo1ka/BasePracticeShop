@@ -5,8 +5,17 @@ export type Product = {
     thumbnail: string;
     description: string;
     rating: number;
-    stock: number;
     brand: string;
     category: string;
     images?: string[];
+
+    isModified?: boolean;
+    isLocal?: boolean;
+    isDeleted?: boolean;
+  }
+
+  export interface AdminProduct extends Product {
+    isModified: boolean;
+    isLocal: boolean;
+    isDeleted: boolean;
   }

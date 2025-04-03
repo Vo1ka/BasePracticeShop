@@ -1,47 +1,62 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Product } from "../../types/type";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Product } from '../../types/type';
 
-export const api = createApi({
-    baseQuery: fetchBaseQuery({
-         baseUrl: 'https://dummyjson.com',
-        prepareHeaders: (headers)=>{
-            headers.set('Accept', 'application/json');
-            return headers;
-        } }),
-    tagTypes: ['Product'], //инвалидация кеша
-        endpoints: (build) => ({
-            getProducts: build.query<Product[], void>({
-                query: () => '/products?limit=100',
-                transformResponse: (Response: {products: Product[]}) => Response.products,
-                providesTags: ['Product'] //Кешируем  с тегом
-            }),
-            getProduct: build.query<Product, number>({
-                query: (id) => `/products/${id}`,
-                providesTags: (_, __, id) => [{type: 'Product', id}]
-            }),
-            getPaginatedProducts: build.query<{ products: Product[], total: number }, { page: number, limit: number }>({
-                query: ({page, limit}) => `/products?limit=${limit}&skip=${(page-1)*limit}`,
-                transformResponse: (response: { products: Product[], total: number }) => ({
-                    products: response.products,
-                    total: response.total
-                }),
-            }),
-            addProduct: build.mutation<Product, Partial<Product>>({
-                query: (body) => ({
-                    url: '/products/add',
-                    method: 'POST',
-                    body
-                }),
-                invalidatesTags: ['Product'] //
-            })
+interface ProductsResponse {
+  products: Product[];
+  total: number;
+  skip: number;
+  limit: number;
+}
 
+// Создаем API с RTK Query
+export const productsApi = createApi({
+  reducerPath: 'productsApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/' }),
+  tagTypes: ['Products'],
+  endpoints: (builder) => ({
+    getProducts: builder.query<ProductsResponse, { limit?: number; skip?: number }>({
+      query: ({ limit = 100, skip = 0 }) => `products?limit=${limit}&skip=${skip}`,
+      providesTags: ['Products'],
+      transformResponse: (response: ProductsResponse) => ({
+        ...response,
+        products: response.products.map(product => ({
+          ...product,
+          isModified: false,
+          isLocal: false,
+          isDeleted: false,
+        })),
+      }),
+    }),
+    //Функционал ниже описан как код для реальных запросов к API
 
-        }),
-            
-  })
-export const {
-    useGetProductsQuery,
-    useGetProductQuery,
-    useAddProductMutation,
-    useGetPaginatedProductsQuery
-} = api;
+    // getProductById: builder.query<Product, number>({
+    //   query: (id) => `products/${id}`,
+    //   providesTags: (result, error, id) => [{ type: 'Products', id }],
+    // }),
+//     addProduct: builder.mutation<Product, Omit<Product, 'id' | 'isModified' | 'isLocal' | 'isDeleted'>>({
+//       query: (newProduct) => ({
+//         url: 'products/add',
+//         method: 'POST',
+//         body: newProduct,
+//       }),
+//       invalidatesTags: ['Products'],
+//     }),
+//     updateProduct: builder.mutation<Product, Partial<Product> & { id: number }>({
+//       query: ({ id, ...patch }) => ({
+//         url: `products/${id}`,
+//         method: 'PATCH',
+//         body: patch,
+//       }),
+//       invalidatesTags: (result, error, { id }) => [{ type: 'Products', id }],
+//     }),
+//     deleteProduct: builder.mutation<void, number>({
+//       query: (id) => ({
+//         url: `products/${id}`,
+//         method: 'DELETE',
+//       }),
+//       invalidatesTags: (result, error, id) => [{ type: 'Products', id }],
+//     }),
+   }),
+});
+
+export const { useGetProductsQuery } = productsApi;

@@ -18,9 +18,13 @@ const AuthModal = ( {onClose}:AuthModalProps)=>{
     const theme = useSelector((state:RootState) => state.theme.mode);
     const handleSubmit = (e:React.FormEvent) =>{
         e.preventDefault();
-        dispatch(login({email, password}))
-        .unwrap()
-        .then(()=>onClose());
+        try {
+          dispatch(login({ email, password }));
+          onClose(); // Закрываем модалку после успешного dispatch
+        } catch (error) {
+          console.error('Login failed:', error);
+          // Обработка ошибки
+        }
     }
 
     return(

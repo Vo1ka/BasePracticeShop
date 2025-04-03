@@ -10,11 +10,26 @@ interface CartItem extends Product {
     items: CartItem[];
     total: number;
   }
-  
-  const initialState: CartState = {
-    items: [],
-    total: 0,
+  const saveCartToLocalStorage = (state: CartState) => {
+    try {
+      localStorage.setItem('cart', JSON.stringify(state));
+    } catch (e) {
+      console.error('Failed to save cart to localStorage', e);
+    }
   };
+  // Функция для безопасного получения cart из localStorage
+  const getInitialCartState = (): CartState => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        return JSON.parse(savedCart);
+      }
+    } catch (e) {
+      console.error('Failed to parse cart from localStorage', e);
+    }
+    return { items: [], total: 0 };
+  };
+  const initialState: CartState = getInitialCartState();
 
   const cartSlice = createSlice({
     name: 'cart',
@@ -28,6 +43,7 @@ interface CartItem extends Product {
           state.items.push(action.payload);
         }
         state.total = calculateTotal(state.items);
+        saveCartToLocalStorage(state)
       },
   
       removeFromCart: (state, action: PayloadAction<number>) => {
@@ -35,6 +51,7 @@ interface CartItem extends Product {
         if (removedItem) {
           state.items = state.items.filter((item) => item.id !== action.payload);
           state.total = calculateTotal(state.items);
+          saveCartToLocalStorage(state)
         }
       },
   

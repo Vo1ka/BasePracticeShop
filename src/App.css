@@ -3,22 +3,69 @@
 /*  переменные */
 :root {
   /* Светлая тема */
+  --page-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --card-border: #e2e8f0;
+
+  --divider-color: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+
+  --accent-primary: #fb923c;
+  --accent-secondary: #f97316;
+
+  --action-icon-color: #94a3b8;
+  --error-color: #ef4444;
+  --item-hover-bg: #f8fafc;
+  --button-hover-shadow: rgba(251, 146, 60, 0.3);
+
+  --accent-primary: #fb923c;
+  --accent-secondary: #f97316;
+  --button-hover-shadow: rgba(251, 146, 60, 0.4);
+
   --header-bg: #fff7ed;
   --header-text: #334155;
   --header-accent: #fb923c;
   --header-shadow: rgba(0, 0, 0, 0.05);
-  --card-bg: #ffffff;
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --card-border: #e2e8f0;
+  
+
+  /* admin */
+  --admin-sidebar-bg: #1e293b;
+  --admin-sidebar-text: #e2e8f0;
+  --admin-sidebar-hover: rgba(255, 255, 255, 0.1);
+  --admin-content-bg: #ffffff;
+  --admin-border: #e2e8f0;
 }
 
 /* Тёмная тема  */
 [data-theme="dark"] {
+  --page-bg: #0f172a;
+
+  --card-bg: #1e293b;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --card-border: #334155;
+
+  --divider-color: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-primary: #38bdf8;
+  --accent-secondary: #0ea5e9;
+
+  --action-icon-color: #64748b;
+  --error-color: #f87171;
+  --item-hover-bg: #334155;
+  --button-hover-shadow: rgba(56, 189, 248, 0.3);
+
   --header-bg: #0f172a; 
   --header-text: #f8fafc; 
   --header-accent: #fdba74;
   --header-shadow: rgba(0, 0, 0, 0.2);
-  --card-bg: #1e293b;
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --card-border: #334155;
+
+   /* Админка в темной теме */
+   --admin-sidebar-bg: #0f172a;
+   --admin-sidebar-text: #f8fafc;
+   --admin-sidebar-hover: rgba(255, 255, 255, 0.2);
+   --admin-content-bg: #1e293b;
+   --admin-border: #334155;
 }

@@ -4,14 +4,14 @@ import './../components/Main/ProductCard/productcard.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { addToCart } from '../store/slices/cartSlice';
+import Footer from '../components/Footer/Footer';
 
-
-export const ProductPage = () => {
+const ProductPage = () => {
   const theme = useSelector((state:RootState)=>state.theme.mode);
 
   const dispatch = useDispatch();
   const { id } = useParams();
-  
+
   const product = useSelector((state: RootState) => 
     state.products.items.find(item => item.id === Number(id))
   );
@@ -33,6 +33,9 @@ export const ProductPage = () => {
             
             </div>
         </div>
+      <Footer></Footer>
     </>
   );
 };
+
+export default ProductPage;

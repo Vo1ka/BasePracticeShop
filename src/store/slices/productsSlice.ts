@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+import type { Product } from '../../types/type';
 // Тип для продукта согласно DummyJSON API
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  thumbnail: string;
-  description: string;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-}
+// interface Product {
+//   id: number;
+//   title: string;
+//   price: number;
+//   thumbnail: string;
+//   description: string;
+//   rating: number;
+//   stock?: number;
+//   brand: string;
+//   category: string;
+// }
 
 interface ProductsState {
   items: Product[];
@@ -62,6 +62,17 @@ const productsSlice = createSlice({
           product.title.toLowerCase().includes(action.payload.toLowerCase())
         );
       }
+    },
+    initializeProducts: (state, action: PayloadAction<Product[]>) => {
+      state.items = action.payload;
+      state.filteredItems = action.payload;
+    },
+    syncAdminChanges: (state, action: PayloadAction<Product[]>) => {
+      const adminProductsMap = new Map(action.payload.map(p => [p.id, p]));
+      
+      state.items = state.items.map(product => {
+        return adminProductsMap.get(product.id) || product;
+      });
     }
   },
   extraReducers: (builder) => {
@@ -82,5 +93,5 @@ const productsSlice = createSlice({
   }
 });
 
-export const { filterProducts } = productsSlice.actions;
+export const { filterProducts, syncAdminChanges, initializeProducts } = productsSlice.actions;
 export default productsSlice.reducer;

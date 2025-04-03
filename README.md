@@ -1,54 +1,46 @@
-# React + TypeScript + Vite
+src/
+├── components/         # UI-компоненты (12+)
+│   ├── Header/         # Шапка с поиском и авторизацией
+│   ├── Footer/         # Подвал сайта
+│   ├── Main/           # Основной контент
+│   └── Modal/         # Модальные окна
+│
+├── Pages/              # Страницы (10+)
+│   ├── AdminPage/      # Админ-панель
+│   ├── CartPage.tsx    # Корзина
+│   └── ProductPage.tsx # Детали товара
+│
+├── store/              # Управление состоянием
+│   ├── slices/         # Redux-слайсы (7)
+│   └── selectors/      # Селекторы
+│
+├── hooks/              # Кастомные хуки (3)
+├── types/              # Типы TypeScript
+└── assets/             # Статические ресурсы
+Ключевой функционал
+1. Работа с товарами (главная особенность)
+Особенности реализации:
+1)RTK Query для API-запросов
+2)Локальное кэширование в Redux
+3)Оптимизированные селекторы
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+2.  Админ-панель
+Админ панель позволяет "модифицировать" товары. То есть, они не изменяются и не удаляются физически, а 
+лишь помечаются локально. Это сделано специально чтобы побольше практиковаться с работой на клиентской стороне.
+API, которое бы поддерживала POST, PUT, DELETE, в рамках этой практики не было. В рамках этой версии сделана кнопка 
+"Стать админом", которая "авторизовывает" пользователя с ролью админа и даёт возможность пользоваться функционалом админа.
+(взаимодействие с товарами).
 
-Currently, two official plugins are available:
+3. Корзина покупок
+Возможность добавлять товары в корзину, прибавлять количество(шаг +1), и удалять из корзины. 
+Динамически изменяется общая стоимость товаров в корзине.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+4. Фейковая авторизация
+Реализована "фейковая" авторизация с имитацией API-запроса
+Авторизация сделана для реализации работы приложения с ролями.
 
-## Expanding the ESLint configuration
+В целом проект получился насыщенным на базовый функционал приложения, было множество декомпозици, 
+некоторая оптимизация(useMemo, lazyLoad страниц).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```

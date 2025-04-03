@@ -1,88 +1,128 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User, UserRole, isUserRole } from './../../types/auth';
 
-interface ApiError {
-  message: string;
-  statusCode?: number;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 interface AuthState {
   user: User | null;
-  token: string | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string |  null
 }
+// Проверка при загрузке из localStorage
+
+const loadInitialUser = (): User | null => {
+  const userJson = localStorage.getItem('authUser');
+  if (!userJson) return null;
+  
+  try {
+    const user = JSON.parse(userJson);
+    return user && user.role && isUserRole(user.role) ? user : null;
+  } catch {
+    return null;
+  }
+};
 
 const initialState: AuthState = {
-  user: null,
-  token: null,
-  status: 'idle',
+  user: loadInitialUser(),
+  isAuthenticated: !!localStorage.getItem('authToken'),
+  isLoading: false,
   error: null
 };
 
-const fakeAuthAPI = async (credentials: { email: string; password: string }) => {
-  return new Promise<{ user: User; token: string }>((resolve, reject) => {
-    setTimeout(() => {
-      if (credentials.password.length >= 6) {
-        resolve({
-          user: {
-            id: '1',
-            name: 'Тестовый Пользователь',
-            email: credentials.email
-          },
-          token: 'fake-jwt-token'
-        });
-      } else {
-        reject({ message: 'Пароль должен содержать минимум 6 символов', statusCode: 400 } as ApiError);
-      }
-    }, 1000);
-  });
-};
-
-export const login = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async ({ email, password, role = 'user' }: { email: string; password: string, role?: UserRole }, { rejectWithValue }) => {
     try {
-      return await fakeAuthAPI(credentials);
-    } catch (error) {
-      return rejectWithValue((error as ApiError).message);
+      // Имитация API-запроса
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (password.length < 6) {
+        throw new Error('Пароль должен содержать минимум 6 символов');
+      }
+      return {
+        user: {
+          id: Date.now().toString(),
+          name: email.split('@')[0],
+          email,
+          role 
+        },
+        token: 'fake-token'
+      };
+    } catch (err) {
+      return rejectWithValue(err instanceof Error ? err.message : 'Auth error');
     }
   }
 );
 
-const authSlice = createSlice({
+
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    login: (state, action: PayloadAction<{ 
+      email: string; 
+      password: string;
+      role?: UserRole; // Для прямого входа с ролью
+    }>) => {
+      const { email, password, role = 'user' } = action.payload;
+      
+      if (password.length < 6) {
+        state.error = 'Пароль должен содержать минимум 6 символов';
+        return;
+      }
+
+      const user: User = {
+        id: Date.now().toString(),
+        name: email.split('@')[0],
+        email,
+        role // Сохраняем роль
+      };
+
+      state.user = user;
+      state.isAuthenticated = true;
+      state.error = null;
+      localStorage.setItem('authToken', 'fake-token');
+      localStorage.setItem('authUser', JSON.stringify(user));
+    },
     logout: (state) => {
       state.user = null;
-      state.token = null;
-      state.status = 'idle';
+      state.isAuthenticated = false;
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('authUser');
+    },
+    clearError: (state) => {
       state.error = null;
-    }
+    },
+    updateUser: (state, action: PayloadAction<User>) => {
+      if (state.user) {
+        state.user = action.payload;
+        localStorage.setItem('authUser', JSON.stringify(action.payload));
+      }
+    },
+    promoteToAdmin: (state) => {
+      if (state.user) {
+        state.user.role = 'admin';
+        localStorage.setItem('authUser', JSON.stringify(state.user));
+      }
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: (builder) =>{
     builder
-      .addCase(login.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload as string;
-      });
+    .addCase(loginUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
+      state.isLoading = false;
+      localStorage.setItem('authToken', action.payload.token);
+      localStorage.setItem('authUser', JSON.stringify(action.payload.user));
+    })
+    .addCase(loginUser.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(loginUser.rejected, (state, action) =>{
+      state.error = action.payload as string;
+    })
   }
 });
 
-export const { logout } = authSlice.actions;
+export const { login, logout,clearError, promoteToAdmin, updateUser } = authSlice.actions;
 export default authSlice.reducer;
