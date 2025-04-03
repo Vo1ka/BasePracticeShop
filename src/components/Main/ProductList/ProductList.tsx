@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from './../../../store/store';
 import { ProductCard } from '../ProductCard/ProductCard';
-import './productList.css';
+import './productlist.css';
 import { Product } from '../../../types/type';
 
 interface ProductListProps {
