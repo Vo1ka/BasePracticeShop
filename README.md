@@ -1,4 +1,4 @@
-[![BasePracticeShop — Live Demo](https://github.com/Vo1ka/BasePracticeShop/tree/develop/src/assets/preview.png)](https://base-practice-shop-o9h1pmfmm-vo1kas-projects.vercel.app/ "Открыть демо на Vercel")
+[![BasePracticeShop — Live Demo](https://github.com/Vo1ka/BasePracticeShop/blob/develop/src/assets/preview.png)](https://base-practice-shop-o9h1pmfmm-vo1kas-projects.vercel.app/ "Открыть демо на Vercel")
 
 ##BasePracticeShop — учебный e‑commerce с акцентом на клиентскую логику##
 ####Важно! для корректного отображения может понадобиться EU IP####
